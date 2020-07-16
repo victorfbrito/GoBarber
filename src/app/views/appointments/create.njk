@@ -1,0 +1,44 @@
+{% extends "_layouts/default.njk" %}
+
+{% block body %}
+  <div class="content">
+    <strong>Agendando horário</strong>
+
+    <div class="provider">
+      <div>
+        <img src="/files/{{ provider.avatar }}" />
+        <strong>{{ provider.name }}</strong>
+      </div>
+    </div>
+
+    <form action="/app/appointments/new/{{ provider.id }}" method="post">
+      <input type="text" class="flatpickr" placeholder="Escolha uma data">
+
+      <div id="hours"></div>
+
+      <button type="submit">Agendar</button>
+
+    </form>
+
+  </div>
+
+  <script type="text/javascript">
+    flatpickr('.flatpickr', {
+      //minDate: dia mínimo é o atual
+      minDate: new Date(),
+      //formato brasileiro
+      dateFormat: 'd/m/Y',
+      //FUNÇÃO DISPARADA QUANDO HÁ SELEÇÃO NA DATA
+      onChange: function (date) {
+        //API FETCH REQUISIÇÃO AJAX
+        //RETORNA DATA EM FORMATO TIMESTAMP
+        fetch(`/app/available/{{ provider.id }}?date=${date[0].getTime()}`).then(function (response) {
+          //TRANSFORMA RESPONSE EM TEXTO E INSERE NO HTML
+          response.text().then(function (html) {
+            document.getElementById('hours').innerHTML = html
+          })
+        })
+      }
+    })
+  </script>
+{% endblock %}

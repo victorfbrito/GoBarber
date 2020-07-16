@@ -1,0 +1,41 @@
+{% extends "_layouts/default.njk" %}
+
+{% block body %}
+  <div class="content">
+    <div class="perfil">
+      <li class="provider">
+        <div>
+          <img src="/files/{{ user.avatar }}" class = "userimg" />
+          <p class="welcome"><strong > Olá, {{ user.name }} <br></strong>{{ user.now }}</p>
+
+          {# <a>{{ provider.email }}</a> #}
+        </div>
+      </li>
+    </div>
+    <p>Confira seus agendamentos do dia:</p>
+    <ul class="providers">
+
+      {% for appointment in appointments %}
+        {%if (appointment.date2 == appointment.today) %}
+          <li class="provider">
+            <div>
+              <img src="/files/{{ appointment.client.avatar }}" />
+              <div>
+                <strong>{{ appointment.client.name }} <br> <p class="normal">{{ appointment.client.email }}</p></strong>
+              </div>
+              <div class = "left">
+                <p>  {{ appointment.hour }}</p>
+              </div>
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <div class = "nomore">
+      <p>Não há mais agendamentos para hoje</p>
+    </div>
+
+    <a href="/app/logout" class="logout">Sair</a>
+  </div>
+
+{% endblock %}
